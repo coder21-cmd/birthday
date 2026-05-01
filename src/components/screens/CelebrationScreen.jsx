@@ -16,31 +16,34 @@ export default function CelebrationScreen({ onReplay }) {
 
       <div className="relative w-full flex flex-col items-center justify-center bg-linear-to-b from-white/50 to-pink-100 rounded-[40px] p-8 shadow-inner mt-4">
         
-        {/* Panda GIF */}
         <img 
           src="/gifs/surprise.gif" 
-          alt="Panda Celebration" 
+          alt="Panda Surprise" 
           className="w-40 h-40 object-contain mb-4" 
         />
 
         <div className="text-center space-y-2">
           <h3 className="text-xl font-bold text-primary">Lots of love for you ❤️</h3>
           
-          {/* Spotify Link */}
+          {/* UPDATED TEXT COLOR HERE */}
+          <p className="text-sm font-medium text-emerald-600/80 italic px-4">
+            "A curated blend handpicked specifically for your 22nd chapter."
+          </p>
+          
           <a 
             href="https://open.spotify.com/playlist/1EdNx7dJYWz6gvmupaJPA9?si=lf4MqSxqTFShEuxZoD6hfA" 
             target="_blank" 
-            className="block py-2 text-green-600 font-semibold hover:underline"
+            rel="noopener noreferrer"
+            className="block mt-4 py-3 px-6 bg-[#1DB954] text-white rounded-full font-bold shadow-lg hover:scale-105 transition-transform"
           >
             🎵 Listen to your playlist
           </a>
 
-          <p className="text-sm text-primary/70 leading-relaxed">
+          <p className="text-sm text-primary/70 leading-relaxed pt-4">
             Once again, Happy Birthday! Hope you loved your surprise.
           </p>
         </div>
 
-        {/* Replay Button */}
         <motion.button
           whileTap={{ scale: 0.95 }}
           onClick={onReplay}
