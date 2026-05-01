@@ -14,7 +14,7 @@ const TypewriterText = ({ text }) => {
           key={index}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.1, delay: index * 0.15, ease: "easeIn" }}
+          transition={{ duration: 0.1, delay: index * 0.1, ease: "easeIn" }}
         >
           {char === " " ? "\u00A0" : char}
         </motion.span>
@@ -29,8 +29,10 @@ export default function PhotosScreen({ onNext }) {
 
   const fullMessage = "You are so Amazing ❤️✨";
   
-  // Widened positions to use the full screen width
-  const horizontalPositions = ["10%", "35%", "65%", "90%"];
+  // Widest possible horizontal positions (Left, Mid-Left, Mid-Right, Right)
+  const horizontalPositions = ["8%", "32%", "68%", "92%"];
+  // Different starting heights so they are vertically spread out from second one
+  const verticalStarts = ["110vh", "130vh", "115vh", "140vh"];
 
   const handlePop = (index, e) => {
     if (!popped[index]) {
@@ -80,7 +82,7 @@ export default function PhotosScreen({ onNext }) {
                 <motion.div 
                   initial={{ opacity: 0, y: 20 }} 
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 3.8 }} 
+                  transition={{ delay: 3.0 }} 
                   className="absolute bottom-12 left-0 right-0 flex justify-center"
                 >
                   <Button onClick={onNext} className="bg-pink-500 text-white px-14 py-4 rounded-full shadow-2xl hover:bg-pink-600 transform scale-110">
@@ -97,20 +99,20 @@ export default function PhotosScreen({ onNext }) {
           <AnimatePresence key={i}>
             {!popped[i] && (
               <motion.div
-                initial={{ y: "120vh", x: horizontalPositions[i] }}
+                // Starts them at different depths so they aren't clumped
+                initial={{ y: verticalStarts[i], x: horizontalPositions[i] }}
                 animate={{ 
                   y: "-120vh", 
-                  // Increased horizontal sway so they don't look like they're in a straight line
-                  x: [horizontalPositions[i], `${parseInt(horizontalPositions[i]) + (i % 2 === 0 ? 10 : -10)}%`, horizontalPositions[i]] 
+                  x: [horizontalPositions[i], `${parseInt(horizontalPositions[i]) + (i % 2 === 0 ? 5 : -5)}%`, horizontalPositions[i]] 
                 }}
                 transition={{ 
                   y: { 
-                    duration: 25 + (i * 4), // Different speeds for each
+                    duration: 22 + (i * 3), 
                     repeat: Infinity, 
                     ease: "linear", 
-                    delay: i * 4 // MASSIVE delay between each balloon starting (0s, 4s, 8s, 12s)
+                    delay: i * 0.5 // Very short delay so they appear almost instantly
                   },
-                  x: { duration: 7 + i, repeat: Infinity, ease: "easeInOut" }
+                  x: { duration: 6 + i, repeat: Infinity, ease: "easeInOut" }
                 }}
                 className="absolute z-20 cursor-pointer"
                 style={{ translateX: "-50%" }}
