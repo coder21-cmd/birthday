@@ -23,9 +23,9 @@ export default function IntroScreen({ onNext }) {
                     style={{
                         filter: "drop-shadow(0 0 20px rgba(255,105,180,0.4))",
                     }}>
-                    A Cutiepie was born today, 21 years ago!
+                    A Cutiepie was born today, 22 years ago! 🎂✨
                 </h1>
-                <p className="mt-4 text-foreground will-change-transform">Yes, it’s YOU! A little surprise awaits...</p>
+                <p className="mt-4 text-foreground will-change-transform">Yes, it's YOU! Suuuchita❤️ A little surprise awaits... 🎁🎈</p>
             </div>
 
             <div
