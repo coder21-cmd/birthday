@@ -28,10 +28,16 @@ export default function MessageScreen() {
                 </div>
             </div>
 
-            {/* Added her name here with identical styling to the main heading */}
-            <h2 className="text-2xl md:text-3xl font-semibold text-primary text-center mt-2">
-                Suchita ❤️✨
-            </h2>
+           {/* Change the name line to this: */}
+<h2 className="text-2xl md:text-3xl font-semibold text-primary text-center mt-2 flex items-center justify-center gap-2">
+    Suchita ❤️ 
+    <motion.span
+      animate={{ opacity: [1, 0.4, 1], scale: [1, 1.2, 1] }}
+      transition={{ duration: 2, repeat: Infinity }}
+    >
+      ✨
+    </motion.span>
+</h2>
         </div>
     )
 }
