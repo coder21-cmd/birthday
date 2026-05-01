@@ -6,18 +6,30 @@ import confetti from "canvas-confetti"
 import Button from "../Button"
 
 const TypewriterText = ({ text }) => {
-  const characters = Array.from(text);
+  // Split the sentence into words first
+  const words = text.split(" ");
+  let globalCharIndex = 0; // Keeps the typing delay continuous across words
+
   return (
-    <div className="text-4xl font-bold text-pink-500 italic leading-tight px-6 min-h-[100px] flex flex-wrap justify-center items-center">
-      {characters.map((char, index) => (
-        <motion.span
-          key={index}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.1, delay: index * 0.1, ease: "easeIn" }}
-        >
-          {char === " " ? "\u00A0" : char}
-        </motion.span>
+    <div className="text-[34px] md:text-4xl font-bold text-pink-500 italic leading-tight px-2 min-h-[100px] text-center">
+      {words.map((word, wordIndex) => (
+        // 'inline-block' is the magic fix! It forces the whole word to stay on one line.
+        <span key={wordIndex} className="inline-block mr-2 md:mr-3">
+          {Array.from(word).map((char, charIndex) => {
+            const delay = globalCharIndex * 0.1;
+            globalCharIndex++;
+            return (
+              <motion.span
+                key={charIndex}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.1, delay: delay, ease: "easeIn" }}
+              >
+                {char}
+              </motion.span>
+            );
+          })}
+        </span>
       ))}
     </div>
   );
