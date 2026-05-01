@@ -5,10 +5,8 @@ import { motion, AnimatePresence } from "framer-motion"
 import confetti from "canvas-confetti"
 import Button from "../Button"
 
-// Typewriter Component
 const TypewriterText = ({ text }) => {
   const characters = Array.from(text);
-  
   return (
     <div className="text-4xl font-bold text-pink-500 italic leading-tight px-6 min-h-[100px] flex flex-wrap justify-center items-center">
       {characters.map((char, index) => (
@@ -16,11 +14,7 @@ const TypewriterText = ({ text }) => {
           key={index}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{
-            duration: 0.1,
-            delay: index * 0.15,
-            ease: "easeIn"
-          }}
+          transition={{ duration: 0.1, delay: index * 0.15, ease: "easeIn" }}
         >
           {char === " " ? "\u00A0" : char}
         </motion.span>
@@ -35,8 +29,8 @@ export default function PhotosScreen({ onNext }) {
 
   const fullMessage = "You are so Amazing ❤️✨";
   
-  // Specific positions: Left, Left-Center, Right-Center, Right
-  const horizontalPositions = ["15%", "38%", "62%", "85%"];
+  // Widened positions to use the full screen width
+  const horizontalPositions = ["10%", "35%", "65%", "90%"];
 
   const handlePop = (index, e) => {
     if (!popped[index]) {
@@ -66,14 +60,10 @@ export default function PhotosScreen({ onNext }) {
   return (
     <div className="bg-[#fff8fc] p-7 rounded-[60px] shadow-2xl w-full max-w-md relative flex flex-col items-center min-h-[650px] my-10 overflow-hidden border-4 border-pink-100 mx-auto">
       
-      {/* Header text */}
       <div className="text-center mt-4 z-30 h-10">
         <AnimatePresence>
           {poppedCount < 4 && (
-            <motion.h2 
-              exit={{ opacity: 0 }}
-              className="text-2xl font-bold text-pink-600"
-            >
+            <motion.h2 exit={{ opacity: 0 }} className="text-2xl font-bold text-pink-600">
               Pop all 4 balloons 🎈
             </motion.h2>
           )}
@@ -85,13 +75,8 @@ export default function PhotosScreen({ onNext }) {
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-10 pointer-events-none">
           <AnimatePresence>
             {poppedCount === 4 && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="w-full flex flex-col items-center pointer-events-auto"
-              >
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="w-full flex flex-col items-center pointer-events-auto">
                 <TypewriterText text={fullMessage} />
-                
                 <motion.div 
                   initial={{ opacity: 0, y: 20 }} 
                   animate={{ opacity: 1, y: 0 }}
@@ -107,25 +92,25 @@ export default function PhotosScreen({ onNext }) {
           </AnimatePresence>
         </div>
 
-        {/* FLYING BALLOONS - COMING FROM THE BOTTOM */}
+        {/* FLYING BALLOONS */}
         {[0, 1, 2, 3].map((i) => (
           <AnimatePresence key={i}>
             {!popped[i] && (
               <motion.div
-                // Forces them to start below the visible screen (120vh)
                 initial={{ y: "120vh", x: horizontalPositions[i] }}
                 animate={{ 
-                  y: "-100vh", // Float way up to the top
-                  x: [horizontalPositions[i], `${parseInt(horizontalPositions[i]) + 8}%`, horizontalPositions[i]] 
+                  y: "-120vh", 
+                  // Increased horizontal sway so they don't look like they're in a straight line
+                  x: [horizontalPositions[i], `${parseInt(horizontalPositions[i]) + (i % 2 === 0 ? 10 : -10)}%`, horizontalPositions[i]] 
                 }}
                 transition={{ 
                   y: { 
-                    duration: 25 + i * 5, 
+                    duration: 25 + (i * 4), // Different speeds for each
                     repeat: Infinity, 
                     ease: "linear", 
-                    delay: i * 2 // Staggered start times
+                    delay: i * 4 // MASSIVE delay between each balloon starting (0s, 4s, 8s, 12s)
                   },
-                  x: { duration: 8, repeat: Infinity, ease: "easeInOut" }
+                  x: { duration: 7 + i, repeat: Infinity, ease: "easeInOut" }
                 }}
                 className="absolute z-20 cursor-pointer"
                 style={{ translateX: "-50%" }}
@@ -135,10 +120,9 @@ export default function PhotosScreen({ onNext }) {
                   <img 
                     src={`/images/balloon${i + 1}.png`} 
                     alt="balloon" 
-                    style={{ width: '160px', height: 'auto' }} // Very Big Balloons
-                    className="drop-shadow-2xl group-hover:scale-110 transition-transform duration-500 active:scale-90"
+                    style={{ width: '150px', height: 'auto' }} 
+                    className="drop-shadow-2xl group-hover:scale-110 transition-transform duration-500"
                   />
-                  {/* Long Thread */}
                   <div className="absolute top-[95%] left-1/2 w-[2px] h-80 bg-gray-400/20 -translate-x-1/2 -z-10" />
                 </div>
               </motion.div>
