@@ -22,6 +22,8 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen overflow-hidden relative">
+      {/* This adds the music button back */}
+      <BackgroundMusic />
 
       <div className="relative z-10 flex min-h-screen items-center justify-center p-4 md:p-6">
         <AnimatePresence mode="wait">
@@ -38,17 +40,7 @@ export default function HomePage() {
         </AnimatePresence>
       </div>
 
-      {/* Watermark */}
-      <motion.div
-        initial={{ x: 100, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{
-          duration: 1,
-          delay: 1,
-        }}
-        className="fixed bottom-4 right-4 text-sm text-black/40 pointer-events-none z-50 font-light">
-        @anujbuilds
-      </motion.div>
+      {/* The watermark code that was here has been removed */}
     </main>
   )
 }
