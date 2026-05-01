@@ -8,21 +8,21 @@ export default function PhotosScreen({ onNext }) {
   const [poppedCount, setPoppedCount] = useState(0);
   const [popped, setPopped] = useState([false, false, false, false]);
 
-  const message = ["You", "are", "a", "Cutiee"];
+  // Updated message with emojis
+  const message = ["You", "are", "my", "Favorite! ✨"];
   
-  // Adjusted positions to match the "fan" look in your image
   const positions = [
-    { left: "15%", bottom: "55%" },
-    { left: "35%", bottom: "65%" },
-    { left: "65%", bottom: "65%" },
-    { left: "85%", bottom: "55%" }
+    { left: "20%", bottom: "50%" },
+    { left: "40%", bottom: "65%" },
+    { left: "60%", bottom: "65%" },
+    { left: "80%", bottom: "50%" }
   ];
 
   const balloonColors = [
-    "bg-gradient-to-br from-pink-200 to-pink-400", 
-    "bg-gradient-to-br from-violet-200 to-violet-400", 
-    "bg-gradient-to-br from-pink-200 to-pink-400", 
-    "bg-gradient-to-br from-violet-200 to-violet-400"
+    "bg-gradient-to-br from-pink-300 to-pink-500", 
+    "bg-gradient-to-br from-violet-300 to-violet-500", 
+    "bg-gradient-to-br from-pink-300 to-pink-500", 
+    "bg-gradient-to-br from-violet-300 to-violet-500"
   ];
 
   const handlePop = (index) => {
@@ -45,24 +45,25 @@ export default function PhotosScreen({ onNext }) {
       </div>
 
       <div className="text-center mt-6">
-        <h2 className="text-2xl font-bold text-accent">Pop all 4 balloons</h2>
+        <h2 className="text-2xl font-bold text-pink-600">Pop all 4 balloons 🎈</h2>
       </div>
 
       {/* Interactive Area */}
       <div className="relative w-full h-80">
-        {/* SVG for curved strings */}
+        {/* SVG for Threads/Strings */}
         <svg className="absolute inset-0 w-full h-full pointer-events-none">
           {positions.map((pos, i) => (
-            <motion.path
-              key={i}
-              // This creates the curve from the balloon position to the bottom center
-              d={`M ${pos.left} ${100 - parseInt(pos.bottom)}% Q 50% 80%, 50% 100%`}
-              stroke="#94a3b8"
-              strokeWidth="1"
-              fill="none"
-              initial={{ pathLength: 0 }}
-              animate={{ pathLength: 1 }}
-            />
+            !popped[i] && (
+              <motion.path
+                key={`string-${i}`}
+                d={`M ${pos.left} ${100 - parseInt(pos.bottom)}% Q 50% 80%, 50% 100%`}
+                stroke="#d1d5db"
+                strokeWidth="1.5"
+                fill="none"
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: 1 }}
+              />
+            )
           ))}
         </svg>
 
@@ -76,21 +77,24 @@ export default function PhotosScreen({ onNext }) {
               {!popped[i] ? (
                 <motion.div
                   initial={{ scale: 1 }}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
+                  whileHover={{ scale: 1.1, rotate: 2 }}
+                  whileTap={{ scale: 0.8 }}
                   onClick={() => handlePop(i)}
-                  className={`w-16 h-20 ${balloonColors[i]} rounded-t-full rounded-b-[50%] shadow-xl cursor-pointer relative`}
+                  className={`w-16 h-20 ${balloonColors[i]} rounded-t-full rounded-b-[45%] shadow-xl cursor-pointer relative`}
                 >
-                  {/* Highlight on balloon */}
-                  <div className="w-3 h-4 bg-white/40 rounded-full absolute top-3 left-3 rotate-12" />
+                  {/* Balloon Reflection */}
+                  <div className="w-3 h-5 bg-white/30 rounded-full absolute top-3 left-3 rotate-12" />
+                  
+                  {/* Balloon Knot (The little triangle at the bottom) */}
+                  <div className={`absolute -bottom-1 left-1/2 -translate-x-1/2 w-3 h-2 ${balloonColors[i]} clip-path-knot`} style={{ clipPath: 'polygon(50% 100%, 0 0, 100% 0)' }} />
                 </motion.div>
               ) : (
                 <motion.div
                   initial={{ scale: 0, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  className="h-20 flex items-center justify-center"
+                  className="h-20 flex items-center justify-center text-center"
                 >
-                  <span className="text-xl font-bold text-accent">
+                  <span className="text-xl font-bold text-pink-600 drop-shadow-sm">
                     {word}
                   </span>
                 </motion.div>
@@ -104,7 +108,7 @@ export default function PhotosScreen({ onNext }) {
       <div className="h-14">
         {poppedCount === 4 && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-            <Button onClick={onNext} className="bg-pink-200 text-accent px-8">
+            <Button onClick={onNext} className="bg-pink-400 text-white px-8 rounded-full">
               Next →
             </Button>
           </motion.div>
