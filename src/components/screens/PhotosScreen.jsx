@@ -29,10 +29,11 @@ export default function PhotosScreen({ onNext }) {
 
   const fullMessage = "You are so Amazing ❤️✨";
   
-  // Widest possible horizontal positions (Left, Mid-Left, Mid-Right, Right)
-  const horizontalPositions = ["5%", "35%", "65%", "95%"];
-  // Different starting heights so they are vertically spread out from second one
-  const verticalStarts = ["110vh", "150vh", "130vh", "170vh"];
+  // THE FIX: These act as CSS "left" properties to spread them across the screen
+  const horizontalPositions = ["15%", "38%", "62%", "85%"];
+  
+  // Different starting heights so they are vertically spread out
+  const verticalStarts = ["110vh", "135vh", "120vh", "150vh"];
 
   const handlePop = (index, e) => {
     if (!popped[index]) {
@@ -40,18 +41,16 @@ export default function PhotosScreen({ onNext }) {
       const x = (rect.left + rect.width / 2) / window.innerWidth;
       const y = (rect.top + rect.height / 2) / window.innerHeight;
 
-      // Triangle confetti as requested
       const triangle = confetti.shapeFromPath({ path: 'M0 10 L5 0 L10 10 z' });
 
       confetti({
-        particleCount: 50,
-        spread: 60,
+        particleCount: 60,
+        spread: 70,
         origin: { x, y },
         shapes: [triangle],
         colors: ["#FF69B4", "#8A2BE2", "#FFB6C1", "#9370DB"],
-        scalar: 1.4, 
-        gravity: 0.6,
-        disableForReducedMotion: true // Helps with mobile lag
+        scalar: 1.6, 
+        gravity: 0.5
       });
 
       const newPopped = [...popped];
@@ -101,33 +100,38 @@ export default function PhotosScreen({ onNext }) {
           <AnimatePresence key={i}>
             {!popped[i] && (
               <motion.div
-                // Starts them at different depths so they aren't clumped
-                initial={{ y: verticalStarts[i], x: horizontalPositions[i] }}
+                // 1. Initial only handles Y (up/down)
+                initial={{ y: verticalStarts[i] }}
                 animate={{ 
                   y: "-120vh", 
-                  x: [horizontalPositions[i], `${parseInt(horizontalPositions[i]) + (i % 2 === 0 ? 5 : -5)}%`, horizontalPositions[i]] 
+                  // 2. Sway back and forth using pixels so it doesn't mess up screen position
+                  x: [0, i % 2 === 0 ? 15 : -15, 0] 
                 }}
                 transition={{ 
                   y: { 
                     duration: 22 + (i * 3), 
                     repeat: Infinity, 
                     ease: "linear", 
-                    delay: i * 0.5 // Very short delay so they appear almost instantly
+                    delay: i * 0.5 
                   },
-                  x: { duration: 6 + i, repeat: Infinity, ease: "easeInOut" }
+                  x: { duration: 4 + i, repeat: Infinity, ease: "easeInOut" }
                 }}
-                className="absolute z-20 cursor-pointer"
-                style={{ translateX: "-50%" }}
+                className="absolute z-20 cursor-pointer transform-gpu"
+                // 3. THE MAGIC FIX: This physically places them across the screen width!
+                style={{ 
+                  left: horizontalPositions[i], 
+                  marginLeft: "-60px" // Centers the 120px balloon perfectly on its spot
+                }}
                 onClick={(e) => handlePop(i, e)}
               >
                 <div className="relative group">
                   <img 
                     src={`/images/balloon${i + 1}.png`} 
                     alt="balloon" 
-                    style={{ width: '150px', height: 'auto' }} 
+                    style={{ width: '120px', height: 'auto' }} 
                     className="drop-shadow-2xl group-hover:scale-110 transition-transform duration-500"
                   />
-                  <div className="absolute top-[95%] left-1/2 w-[2px] h-80 bg-gray-400/20 -translate-x-1/2 -z-10" />
+                  <div className="absolute top-[95%] left-1/2 w-[2px] h-80 bg-gray-400/30 -translate-x-1/2 -z-10" />
                 </div>
               </motion.div>
             )}
