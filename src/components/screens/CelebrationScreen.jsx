@@ -40,7 +40,7 @@ export default function CelebrationScreen({ onReplay }) {
           </a>
 
           <p className="text-sm text-primary/70 leading-relaxed pt-4">
-            Once again, Happy Birthday! Hope you loved your surprise.
+            Once again, Happy Birthday! Hope you loved my surprise🥹🥹.
           </p>
         </div>
 
