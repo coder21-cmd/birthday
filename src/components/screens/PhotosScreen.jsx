@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import confetti from "canvas-confetti"
 import Button from "../Button"
@@ -10,23 +10,22 @@ const TypewriterText = ({ text }) => {
   const characters = Array.from(text);
   
   return (
-    <motion.div className="text-4xl font-bold text-pink-500 italic leading-tight px-4">
+    <div className="text-4xl font-bold text-pink-500 italic leading-tight px-6 min-h-[80px]">
       {characters.map((char, index) => (
         <motion.span
           key={index}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{
-            // Slowed down the typing speed (0.15s per letter)
-            duration: 0.2,
-            delay: index * 0.15,
+            duration: 0.1,
+            delay: index * 0.15, // Noticeable typewriter speed
             ease: "easeIn"
           }}
         >
           {char}
         </motion.span>
       ))}
-    </motion.div>
+    </div>
   );
 };
 
@@ -36,6 +35,9 @@ export default function PhotosScreen({ onNext }) {
 
   const fullMessage = "You are so Amazing ❤️✨";
   
+  // Specific positions as requested: Left, Left-Center, Right-Center, Right
+  const horizontalPositions = ["10%", "35%", "65%", "90%"];
+
   const handlePop = (index, e) => {
     if (!popped[index]) {
       const rect = e.currentTarget.getBoundingClientRect();
@@ -45,13 +47,13 @@ export default function PhotosScreen({ onNext }) {
       const triangle = confetti.shapeFromPath({ path: 'M0 10 L5 0 L10 10 z' });
 
       confetti({
-        particleCount: 50,
-        spread: 60,
+        particleCount: 60,
+        spread: 70,
         origin: { x, y },
         shapes: [triangle],
         colors: ["#FF69B4", "#8A2BE2", "#FFB6C1", "#9370DB"],
-        scalar: 1.5, // Bigger pop triangles
-        gravity: 0.6
+        scalar: 1.6, 
+        gravity: 0.5
       });
 
       const newPopped = [...popped];
@@ -64,15 +66,23 @@ export default function PhotosScreen({ onNext }) {
   return (
     <div className="bg-[#fff8fc] p-7 rounded-[60px] shadow-2xl w-full max-w-md relative flex flex-col items-center min-h-[650px] my-10 overflow-hidden border-4 border-pink-100">
       
-      <div className="text-center mt-4 z-30">
-        <h2 className="text-2xl font-bold text-pink-600">
-          {poppedCount < 4 ? "Pop all 4 balloons 🎈" : ""}
-        </h2>
+      {/* Task Header */}
+      <div className="text-center mt-4 z-30 h-10">
+        <AnimatePresence>
+          {poppedCount < 4 && (
+            <motion.h2 
+              exit={{ opacity: 0 }}
+              className="text-2xl font-bold text-pink-600"
+            >
+              Pop all 4 balloons 🎈
+            </motion.h2>
+          )}
+        </AnimatePresence>
       </div>
 
-      <div className="absolute inset-0 w-full h-full pt-20">
+      <div className="absolute inset-0 w-full h-full">
         {/* REVEALED MESSAGE AREA */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-10">
           <AnimatePresence>
             {poppedCount === 4 && (
               <motion.div
@@ -82,14 +92,14 @@ export default function PhotosScreen({ onNext }) {
               >
                 <TypewriterText text={fullMessage} />
                 
-                {/* Continue Button - Absolute Centered Bottom of Card */}
+                {/* Continue Button - Centered at the bottom of the card */}
                 <motion.div 
                   initial={{ opacity: 0, y: 20 }} 
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 3.5 }} // Shows after typing finishes
-                  className="absolute bottom-10 left-1/2 -translate-x-1/2 w-full flex justify-center"
+                  transition={{ delay: 3.8 }} 
+                  className="absolute bottom-12 left-0 right-0 flex justify-center"
                 >
-                  <Button onClick={onNext} className="bg-pink-500 text-white px-14 py-4 rounded-full shadow-2xl hover:bg-pink-600 scale-110 transition-all">
+                  <Button onClick={onNext} className="bg-pink-500 text-white px-14 py-4 rounded-full shadow-2xl hover:bg-pink-600 transform scale-110">
                     Continue →
                   </Button>
                 </motion.div>
@@ -103,30 +113,29 @@ export default function PhotosScreen({ onNext }) {
           <AnimatePresence key={i}>
             {!popped[i] && (
               <motion.div
-                // MASSIVE SIZE & SUPER SLOW MOVEMENT
-                initial={{ y: "110%", x: `${10 + i * 22}%` }}
+                // Positioning logic: Left, center-left, center-right, right
+                initial={{ y: "110%", x: horizontalPositions[i] }}
                 animate={{ 
-                  y: "-40vh", // Float way past the top
-                  x: [`${10 + i * 22}%`, `${20 + i * 22}%`, `${10 + i * 22}%`] 
+                  y: "-50vh", 
+                  x: [horizontalPositions[i], `${parseInt(horizontalPositions[i]) + 5}%`, horizontalPositions[i]] 
                 }}
                 transition={{ 
-                  // Duration increased to 25s - 35s for a very slow crawl
-                  y: { duration: 25 + i * 4, repeat: Infinity, ease: "linear", delay: i * 3 },
-                  x: { duration: 6, repeat: Infinity, ease: "easeInOut" }
+                  y: { duration: 28 + i * 5, repeat: Infinity, ease: "linear", delay: i * 2 },
+                  x: { duration: 7, repeat: Infinity, ease: "easeInOut" }
                 }}
                 className="absolute z-20 cursor-pointer"
+                style={{ translateX: "-50%" }}
                 onClick={(e) => handlePop(i, e)}
               >
                 <div className="relative group">
                   <img 
                     src={`/images/balloon${i + 1}.png`} 
                     alt="balloon" 
-                    // Set width to a fixed 140px for "Big" balloons
-                    style={{ width: '140px', height: 'auto' }}
+                    style={{ width: '150px', height: 'auto' }} // BIGGER size
                     className="drop-shadow-2xl group-hover:scale-105 transition-transform duration-500"
                   />
-                  {/* Long Thread */}
-                  <div className="absolute top-[90%] left-1/2 w-[2px] h-60 bg-gray-400/30 -translate-x-1/2 -z-10" />
+                  {/* Extra long thread */}
+                  <div className="absolute top-[90%] left-1/2 w-[2px] h-80 bg-gray-400/20 -translate-x-1/2 -z-10" />
                 </div>
               </motion.div>
             )}
