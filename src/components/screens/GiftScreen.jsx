@@ -63,7 +63,7 @@ export default function GiftScreen({ onNext }) {
             >
               {/* Using your gift image */}
               <img 
-                src="/images/cover.webp" // Based on your file list earlier
+                src="/gif/gift.gif" // Based on your file list earlier
                 alt="Gift Box"
                 className="w-48 h-auto drop-shadow-2xl"
               />
