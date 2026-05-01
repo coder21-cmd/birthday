@@ -30,9 +30,9 @@ export default function PhotosScreen({ onNext }) {
   const fullMessage = "You are so Amazing ❤️✨";
   
   // Widest possible horizontal positions (Left, Mid-Left, Mid-Right, Right)
-  const horizontalPositions = ["8%", "32%", "68%", "92%"];
+  const horizontalPositions = ["5%", "35%", "65%", "95%"];
   // Different starting heights so they are vertically spread out from second one
-  const verticalStarts = ["110vh", "130vh", "115vh", "140vh"];
+  const verticalStarts = ["110vh", "150vh", "130vh", "170vh"];
 
   const handlePop = (index, e) => {
     if (!popped[index]) {
@@ -40,16 +40,18 @@ export default function PhotosScreen({ onNext }) {
       const x = (rect.left + rect.width / 2) / window.innerWidth;
       const y = (rect.top + rect.height / 2) / window.innerHeight;
 
+      // Triangle confetti as requested
       const triangle = confetti.shapeFromPath({ path: 'M0 10 L5 0 L10 10 z' });
 
       confetti({
-        particleCount: 60,
-        spread: 70,
+        particleCount: 50,
+        spread: 60,
         origin: { x, y },
         shapes: [triangle],
         colors: ["#FF69B4", "#8A2BE2", "#FFB6C1", "#9370DB"],
-        scalar: 1.6, 
-        gravity: 0.5
+        scalar: 1.4, 
+        gravity: 0.6,
+        disableForReducedMotion: true // Helps with mobile lag
       });
 
       const newPopped = [...popped];
