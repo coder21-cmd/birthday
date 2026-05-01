@@ -2,30 +2,28 @@
 
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Sprout, Sparkles, Sun, Mail } from "lucide-react"
 import Button from "../Button"
 
 export default function PhotosScreen({ onNext }) {
-  const [plants, setPlants] = useState([]);
+  const [poppedCount, setPoppedCount] = useState(0);
+  const [popped, setPopped] = useState([false, false, false, false]);
 
-  // Function to add a plant/flower when the garden is tapped
-  const addPlant = () => {
-    if (plants.length < 8) {
-      const newPlant = {
-        id: Date.now(),
-        x: Math.random() * 80 + 10, 
-        size: Math.random() * 20 + 30,
-        // Using flowers and plants that fit an artistic vibe
-        type: ["🌸", "🌿", "🌷", "🌻", "🍀"][Math.floor(Math.random() * 5)]
-      };
-      setPlants([...plants, newPlant]);
+  const message = ["You", "are", "a", "Cutiee"];
+  const balloonColors = ["bg-pink-300", "bg-violet-300", "bg-yellow-200", "bg-blue-200"];
+
+  const handlePop = (index) => {
+    if (!popped[index]) {
+      const newPopped = [...popped];
+      newPopped[index] = true;
+      setPopped(newPopped);
+      setPoppedCount(prev => prev + 1);
     }
   };
 
   return (
     <div className="bg-[#fff8fc] p-7 rounded-[60px] drop-shadow-2xl min-w-48 w-full max-w-110 relative flex flex-col items-center gap-4 my-10 overflow-hidden">
       
-      {/* Decorative Bunting/Banner at the top */}
+      {/* Decorative Bunting at the top */}
       <div className="absolute top-0 left-0 w-full h-16 pointer-events-none z-20 flex justify-around opacity-70">
         {[...Array(6)].map((_, i) => (
           <div 
@@ -37,65 +35,72 @@ export default function PhotosScreen({ onNext }) {
         ))}
       </div>
 
-      <div className="text-center mt-4">
-        <h2 className="text-2xl md:text-3xl font-semibold text-accent flex items-center justify-center gap-2">
-          Suuu's Digital Garden <Sprout className="text-green-500" />
-        </h2>
-        <p className="text-sm text-accent/70 mt-1 italic">Tap the grass to plant a wish ✨</p>
+      <div className="text-center mt-6">
+        <h2 className="text-2xl font-bold text-accent">Pop the balloons!</h2>
+        <p className="text-sm text-accent/70 mt-1 italic">There's a secret message inside...</p>
       </div>
 
-      {/* The Interactive Garden Area */}
-      <div 
-        onClick={addPlant}
-        className="relative h-72 bg-linear-to-b from-blue-50/50 to-green-100/50 w-full rounded-[40px] shadow-inner overflow-hidden cursor-pointer border-2 border-white/50"
-      >
-        {/* Sun Animation */}
-        <motion.div 
-          animate={{ rotate: 360 }}
-          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-          className="absolute top-4 right-4 text-yellow-400/60"
-        >
-          <Sun size={40} />
-        </motion.div>
-
-        {/* Floating "Instruction" text if empty */}
-        {plants.length === 0 && (
-          <div className="absolute inset-0 flex items-center justify-center text-green-400 text-sm animate-pulse">
-            Click here to start growing...
-          </div>
-        )}
-
-        {/* Render the Plants */}
-        <AnimatePresence>
-          {plants.map((plant) => (
-            <motion.div
-              key={plant.id}
-              initial={{ scale: 0, y: 20, opacity: 0 }}
-              animate={{ scale: 1, y: 0, opacity: 1 }}
-              exit={{ scale: 0, opacity: 0 }}
-              className="absolute bottom-6 select-none"
-              style={{ left: `${plant.x}%`, fontSize: `${plant.size}px` }}
-            >
-              {plant.type}
-            </motion.div>
+      {/* Balloon Area */}
+      <div className="relative w-full h-80 flex items-center justify-center">
+        {/* The Strings (meeting at the bottom) */}
+        <svg className="absolute inset-0 w-full h-full pointer-events-none">
+          {message.map((_, i) => (
+            <path
+              key={i}
+              d={`M ${50 + (i - 1.5) * 25}% 120 L 50% 280`} // Curved strings from balloons to bottom center
+              stroke="#d1d5db"
+              strokeWidth="1.5"
+              fill="none"
+              strokeDasharray="4"
+            />
           ))}
-        </AnimatePresence>
-        
-        {/* Ground/Grass Layer */}
-        <div className="absolute bottom-0 w-full h-8 bg-green-200/40 blur-sm" />
+        </svg>
+
+        <div className="flex justify-between w-full px-4 relative z-10">
+          {message.map((word, i) => (
+            <div key={i} className="flex flex-col items-center">
+              <AnimatePresence mode="wait">
+                {!popped[i] ? (
+                  <motion.div
+                    initial={{ y: 0 }}
+                    animate={{ y: [0, -10, 0] }}
+                    transition={{ duration: 3, repeat: Infinity, delay: i * 0.5 }}
+                    whileTap={{ scale: 0.8 }}
+                    onClick={() => handlePop(i)}
+                    className={`w-14 h-18 md:w-16 md:h-20 ${balloonColors[i]} rounded-t-full rounded-b-[50%] shadow-lg cursor-pointer flex items-center justify-center`}
+                  >
+                     <div className="w-2 h-2 bg-white/30 rounded-full absolute top-4 left-4" />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    className="h-20 flex items-center justify-center"
+                  >
+                    <span className="text-xl font-bold text-accent drop-shadow-sm">
+                      {word}
+                    </span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          ))}
+        </div>
       </div>
 
-      <div className="text-center px-4">
-        <p className="text-xs md:text-sm text-accent/80 leading-relaxed font-medium">
-          "Like your art, may your life always be <br/> full of vibrant colors and peaceful growth."
-        </p>
-      </div>
-
-      <div className="mt-2">
-        <Button onClick={onNext} className="bg-[#ddd6ff] text-accent">
-          <Mail size={18} /> Open My Letter
-        </Button>
+      {/* Next Button - only appears when all 4 are popped */}
+      <div className="h-14">
+        {poppedCount === 4 && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <Button onClick={onNext} className="bg-pink-200 text-accent">
+              Next →
+            </Button>
+          </motion.div>
+        )}
       </div>
     </div>
-  )
+  );
 }
