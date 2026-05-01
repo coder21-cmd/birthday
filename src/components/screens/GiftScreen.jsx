@@ -40,8 +40,9 @@ export default function GiftScreen({ onNext }) {
 
   return (
     <div className="bg-[#fff8fc] p-7 rounded-[60px] shadow-2xl w-full max-w-md relative flex flex-col items-center min-h-[550px] my-10 border-4 border-pink-100 mx-auto overflow-hidden">
-      <h2 className="text-3xl font-bold text-purple-600 mt-6 mb-10 italic">
-      ✨Here is your Gift❤️✨
+     {/* text-balance makes lines even, and whitespace-nowrap prevents random drops if it fits */}
+      <h2 className="text-[28px] sm:text-3xl font-bold text-purple-600 mt-6 mb-10 italic text-center px-2 flex justify-center items-center flex-wrap">
+        ✨Here is your&nbsp;Gift❤️✨
       </h2>
 
       <div className="flex-1 flex flex-col items-center justify-center w-full relative">
