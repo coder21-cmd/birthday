@@ -25,7 +25,7 @@ export default function GiftScreen({ onNext }) {
         >
           {/* Replace with your Gift Box GIF path */}
           <img 
-            src="/images/gift-box.gif" 
+            src="/gifs/gift.gif" 
             alt="Gift Box" 
             className="w-48 h-48 object-contain drop-shadow-md" 
           />
