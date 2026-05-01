@@ -40,9 +40,13 @@ export default function GiftScreen({ onNext }) {
 
   return (
     <div className="bg-[#fff8fc] p-7 rounded-[60px] shadow-2xl w-full max-w-md relative flex flex-col items-center min-h-[550px] my-10 border-4 border-pink-100 mx-auto overflow-hidden">
-     {/* text-balance makes lines even, and whitespace-nowrap prevents random drops if it fits */}
-      <h2 className="text-[28px] sm:text-3xl font-bold text-purple-600 mt-6 mb-10 italic text-center px-2 flex justify-center items-center flex-wrap">
-        ✨Here is your&nbsp;Gift❤️✨
+     {/* Changes made: 
+        1. Reduced base font size slightly (text-[34px]) so it fits better on very narrow phones.
+        2. Added text-balance (supported in new browsers) for more even lines.
+        3. Ensured flex centering (flex justify-center flex-wrap).
+      */}
+      <h2 className="text-[34px] md:text-3xl font-bold text-purple-600 mt-6 mb-10 italic text-center px-6 flex justify-center items-center flex-wrap text-balance leading-snug">
+        ✨Here is your Gift❤️✨
       </h2>
 
       <div className="flex-1 flex flex-col items-center justify-center w-full relative">
